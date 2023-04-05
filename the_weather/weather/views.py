@@ -1,5 +1,6 @@
 from django.shortcuts import render
 import requests
+from .models import City
 
 
 def index(request):
@@ -7,14 +8,24 @@ def index(request):
     url = 'https://api.openweathermap.org/data/2.5/weather?q={}&appid={}&units=imperial'
     city = 'New york'
 
-    res = requests.get(url.format(city, API)).json()
+    cities = City.objects.all()
+    weather_data = []
 
-    city_weather = {
-        'city': city,
-        'temperature': res['main']['temp'],
-        'description': res['weather'][0]['description'],
-        'icon': res['weather'][0]['icon'],
-    }
-    context = {'city_weather': city_weather}
+    for city in cities:
+
+        res = requests.get(url.format(city, API)).json()
+
+        city_weather = {
+            'city': city.name,
+            'temperature': res['main']['temp'],
+            'description': res['weather'][0]['description'],
+            'icon': res['weather'][0]['icon'],
+        }
+
+        weather_data.append(city_weather)
+
+    print(weather_data)
+
+    context = {'weather_data': weather_data}
 
     return render(request, 'weather/index.html', context)
