@@ -10,13 +10,14 @@
     <div class="container">
       <h1 class='text-center mb-5 mt-5'>Weather</h1>
       <div class="search-box-area d-flex justify-content-center p-3 card shadow p-3 mb-5 bg-body rounded ">
-        <form class="d-flex" role="search">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-primary" type="submit">Search</button>
+        <form class="d-flex" role="search" method="POST">
+          {% csrf_token %}
+          {{form.name}}
+          <button class="btn btn-primary" type="submit">Add City</button>
         </form>
       </div>
       {% for city_weather in weather_data %}
-      <div class="card mb-3" style="max-width: 300px;">
+      <div class="card mb-3 shadow p-3" style="max-width: 300px;">
         <div class="row g-0">
           <div class="col-md-4 text-center">
             <img src="http://openweathermap.org/img/wn/{{city_weather.icon}}@2x.png" class="img-fluid rounded-circle" alt="...">
